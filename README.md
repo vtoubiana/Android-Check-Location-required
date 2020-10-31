@@ -1,5 +1,5 @@
-# Android-BLE-Scanner
+# Android Check location is required
 
-Sample app that uses Bluetooth Low Energy to scan for nearby devices and display them in a Recycler View.
+Simple tool to check that your Android phone can do filtered scan with location services/GPS off
 
 Written in Kotlin.
