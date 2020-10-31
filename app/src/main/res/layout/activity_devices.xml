@@ -6,27 +6,39 @@
         android:layout_width="match_parent" android:layout_height="match_parent">
 
     <Button
-            android:id="@+id/button_discover"
+            android:id="@+id/button_discover3"
+            android:layout_width="416dp"
+            android:layout_height="57dp"
             android:background="@android:color/white"
+            android:text="@string/start_scanning_filter"
             android:textColor="@color/colorPrimary"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:text="@string/start_scanning"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/recycler_view_devices"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/recycler_view_devices"/>
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+            android:id="@+id/button_discover"
+            android:layout_width="412dp"
+            android:layout_height="68dp"
+            android:background="@android:color/white"
+            android:text="@string/start_scanning"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toTopOf="@id/recycler_view_devices"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_devices"
-            android:layout_height="0dp"
-            android:layout_width="0dp"
-            tools:listitem="@layout/adapter_devices"
+            android:layout_width="412dp"
+            android:layout_height="586dp"
+            android:layout_marginTop="52dp"
             android:scrollbars="vertical"
-            app:layout_constraintTop_toBottomOf="@id/button_discover"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/button_discover"
+            tools:listitem="@layout/adapter_devices" />
 
     <ProgressBar
             android:id="@+id/progress_bar"
