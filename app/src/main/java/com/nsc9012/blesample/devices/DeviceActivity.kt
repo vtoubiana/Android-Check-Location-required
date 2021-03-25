@@ -1,13 +1,12 @@
 package com.nsc9012.blesample.devices
 
-//import android.bluetooth.le.BluetoothLeScanner
-//import android.bluetooth.le.ScanCallback
-//import android.bluetooth.le.ScanResult
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 
 
 import android.Manifest
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
+import android.bluetooth.le.*
+
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,7 +21,6 @@ import com.nsc9012.blesample.extensions.invisible
 import com.nsc9012.blesample.extensions.toast
 import com.nsc9012.blesample.extensions.visible
 import kotlinx.android.synthetic.main.activity_devices.*
-import no.nordicsemi.android.support.v18.scanner.*
 import java.util.*
 import kotlin.experimental.and
 
@@ -46,7 +44,7 @@ class DeviceActivity : AppCompatActivity() {
     private val BIT_INDEX_OF_16_BIT_UUID: Int = 32
     private lateinit var bluetoothManager: BluetoothManager
     private lateinit var bluetoothAdapter: BluetoothAdapter
-    private lateinit var bluetoothLeScanner: BluetoothLeScannerCompat
+    private lateinit var bluetoothLeScanner: BluetoothLeScanner
 
     private val deviceListAdapter = DevicesAdapter()
 
@@ -129,7 +127,7 @@ class DeviceActivity : AppCompatActivity() {
 
         bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         bluetoothAdapter = bluetoothManager.adapter
-        bluetoothLeScanner = BluetoothLeScannerCompat.getScanner()
+        bluetoothLeScanner =  bluetoothAdapter.bluetoothLeScanner
 
         if (!bluetoothAdapter.isEnabled) {
             val enableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
@@ -144,16 +142,28 @@ class DeviceActivity : AppCompatActivity() {
         }
 
     }
+/*
+    private fun needLocationEnabled() : Boolean {
+        if (Build.VERSION.SDK_INT > 28) {
+            return !bluetoothAdapter.isOffloadedScanBatchingSupported
+        }
+        if (Build.VERSION.SDK_INT == 28){
+            val  requiresLocationEnabled =   android.R.bool.
+            return !bluetoothAdapter.isOffloadedScanBatchingSupported and
 
-    
+        }
+        if (Build.VERSION.SDK_INT < 28){
+
+        }
+
+    }*/
+
+
 
     private fun startScanning() {
         val settings = ScanSettings.Builder()
-            .setLegacy(true)
             .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
             .setReportDelay(1000)
-            .setUseHardwareBatchingIfSupported(true)
-            .setUseHardwareFilteringIfSupported(true)
             .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
             .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
             .setNumOfMatches(ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT)
@@ -164,20 +174,17 @@ class DeviceActivity : AppCompatActivity() {
 
     private fun startFilteredScanning() {
         val settings = ScanSettings.Builder()
-            .setLegacy(true)
             .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
             .setReportDelay(1000)
-            .setUseHardwareBatchingIfSupported(true)
-            .setUseHardwareFilteringIfSupported(true)
             .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
             .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
             .setNumOfMatches(ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT)
             .build()
-        val filters =buildScanFilter()
+        val filters = listOf(ScanFilter.Builder().setManufacturerData(76,null,null).build()) //buildScanFilter()
 
         AsyncTask.execute { bluetoothLeScanner.startScan(filters, settings,leScanCallback) }
     }
-
+/*
     private fun buildScanFilter(): List<ScanFilter> {
         return listOf(
             ScanFilter.Builder().setServiceUuid(ParcelUuid(UUID.fromString(EN_service_id))).build(),
@@ -191,7 +198,7 @@ class DeviceActivity : AppCompatActivity() {
                 ).build(),
             ScanFilter.Builder().setServiceUuid(ParcelUuid(UUID.fromString(TT_service_UUID))).build()
         )
-    }
+    }*/
 
 
     private fun stopScanning() {
